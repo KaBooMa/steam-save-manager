@@ -3,3 +3,9 @@ Characters/*
 Characters
 Creations
 Creations/*
+venv/
+Saves/
+__pycache__/
+output/
+build/
+persist.json

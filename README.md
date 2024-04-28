@@ -1,42 +1,49 @@
-# save-manager
-A python program for adding new game / multiple character support to Steam games.
+# Steam Save Manager
+A Python program for managing multiple Steam save files.
+
+![dropdown](imgs/app.png)
+
 # Features
-- Start a new game whenever you want without losing your progress on other characters
-- Create multiple characters and switch between them
-- Unlimited number of save files for each individual character you create
+- Start a new save whenever you want without losing your progress on other saves
+- Create saves and switch between them
+- Unlimited number of save files
+
+# Planned Features
+- Backups on saves
+- Automatic backups while application is running (on interval)
+- Editing save names and notes
+- Import saves
+
 # Disclaimer
-While I have done my best to test this extensively with my saves, I can make no guarantee that no damage will happen to your saves. I will do my best to keep this software updated with any bug fixes, but I am not responsible for data loss as a result of this tool. This is for people like me who are willing to risk incompatibility with game servers and/or accidental file loss to restore this functionality to my games.
+While I have tested in a controlled environment, I haven't given this enough time to guarantee your save files. Multiple checks have been put in place to prevent data loss, but there is always a possibility I missed something. As I can test further, i'll update this.
+
+**Please take care to back up your saves if you have concerns.**
+
 # Installation
-Requires Python 3
-(Optional: Requires Git)
+On the right side of Github, navigate to `Releases` and download the latest.
+
+Note: The same concepts applied in llamaiscool's version was applied here. The below may still be relevant, but has not been tested.
 
 **THIS PROGRAM WILL NOT WORK IF YOU DO NOT DISABLE STEAM CLOUD FOR YOUR GAME**
 
 Before installing, I recommend backing up your save file manually just in case something goes wrong.
 
-**Option 1. Download ZIP file**
-
-If you are downloading on Github, Click on the green `Code` button and choose `Download ZIP`. Unzip this folder at the location you want to store the program (and your saves).
-
-In the file explorer, run save-manager.bat
-
-**Option 2. Install with Git**
-
-To install with Git, click on the green "Code" button and copy the link https://github.com/wiseLlama0/save-manager.git.
-
-Open a terminal and navigate to where you want to store the program.
-
-Type `git clone https://github.com/wiseLlama0/save-manager.git`
-
-Type `cd save-manager`
-
-Type `python SaveManager.py`
-
 # How to Use
 
-When you start the program, follow the setup instructions carefully. When it asks you to select a save folder, select the folder with the name matching the steam game id that contains two files and a folder. It will contain `remote`, another file, and `remotecache.vdf`. 
+Extract the zip file into a folder somewhere safe.
 
-This file is usually found at `Program Files (x86)/Steam/userdata/{your steam account id}/{game id}`. For example, the game id for Dragon's Dogma 2 is 2054970, so the folder you want is `C:/Program Files (x86)/Steam/userdata/{your steam account id}/2054970`.
+Launch the `Steam Save Manager.exe`  application
 
-Another important note: Remember that any action which deploys new data to the game save folder (loading a save, changing your character, or starting a new character) will permanently delete whatever files are in there. Make sure save them using the Save Game function provided within this tool, or back them up manually yourself. I have done my best to add warnings and a last minute backup save option in all cases that one could accidentally destroy data, however I can make no guarantees that there is perfect coverage.
+The application will attempt to automatically locate your save folder. In the event it is unable, you will be prompted to do so yourself. 
 
+**If you are asked to locate the folders yourself:** This file is usually found at `Program Files (x86)/Steam/userdata/{your steam account id}/{game id}`. For example, the game id for Dragon's Dogma 2 is 2054970, so the folder you want is `C:/Program Files (x86)/Steam/userdata/{your steam account id}/2054970`.
+
+All of your currently installed games will be presented in the top-left dropdown. Select the game you'd like to begin managing saves for.
+
+**Your current save file will be automatically added upon selection as "MainSave"**
+
+![dropdown](imgs/dropdown.png)
+
+You can now click `New` in the top-right to create a new save folder. Notes can be added to help you remember what each save is for, or just  to remind yourself of mods used with it. Whatever you want to put there :)
+
+When you want to manually save your active save, click the `Save` button in the top-right. **This will overwrite any previous data for your active save.**

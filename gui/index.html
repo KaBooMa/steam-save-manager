@@ -1,0 +1,97 @@
+<html data-bs-theme="dark">
+    <head>
+        <script type="text/javascript" src="/eel.js"></script>
+        <script defer src="alpine.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <title>Steam Save Manager</title>
+    </head>
+    <body x-data="app"> 
+        <!-- x-data="toast"  -->
+        <!-- TOAST -->
+        <div class="position-fixed d-flex flex-column justify-content-center w-100 h-100 pe-none z-1">
+            <div class="mt-auto"></div>
+            <template x-for="toast in toasts">
+                <div class="bg-success rounded shadow p-2 mb-2 mx-2 text-center" x-data="{show: false}" x-show="show" x-init="$nextTick(() => {show = true})" x-transition>
+                    <span x-text="toast"></span>
+                </div>
+            </template>
+        </div>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg bg-primary">
+            <div class="container-fluid">
+                <span><b>Game</b></span>
+                <select class="form-select w-auto ms-2 me-4" x-on:change="eel.select_game($event.target.value); update()" x-model="data?.selected_app_id">
+                    <template x-for="(name, appid) in data?.games">
+                        <option x-text="name" :value="appid"></option>
+                    </template>
+                </select>
+                <span><b>Active Save</b> <span x-text="data?.active_save"></span></span>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="nav-link" x-on:click="loadPage('view')" :class="{ 'active': page == 'view' }">View</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" x-on:click="loadPage('new')" :class="{ 'active': page == 'new' }">New</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" x-on:click="eel.save_game()().then((val) => { if (val == true) { notify('Saved Successfully!') } })">Save</button>
+                    </li>
+                    <li class="nav-item">
+                        <button hidden class="nav-link">Auto Backup</button>
+                    </li>
+                    <li class="nav-item">
+                        <button hidden class="nav-link" x-on:click="loadPage('help')" :class="{ 'active': page == 'help' }">Help</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="content" class="w-100" x-init="loadPage('view');"></div>
+
+        <script>
+            function loadPage(page) {
+                fetch(`${page}.html`)
+                    .then(res => res.text())
+                    .then(html => {
+                        var content = document.getElementById('content');
+                        content.innerHTML = html;
+                    });
+            }
+
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('app', () => ({
+                    toasts: [],
+                    data: null,
+                    page: null,
+
+                    update() {
+                        eel.get_app_data()().then(data => {
+                            this.data = data;
+                        });
+                    },
+
+                    notify(msg) {
+                        this.toasts.push(msg);
+                        setTimeout(() => {
+                            this.toasts.shift();
+                        }, 2000);
+                    },
+
+                    loadPage(name) {
+                        fetch(`${name}.html`)
+                            .then(res => res.text())
+                            .then(html => {
+                                var content = document.getElementById('content');
+                                content.innerHTML = html;
+                                this.page = name;
+                                this.update();
+                                this.update(); // Hacky fix for sh*t not loading...
+                            });
+                    },
+                }));
+            });
+
+        </script>
+    </body>
+</html>

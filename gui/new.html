@@ -1,0 +1,7 @@
+<form class="d-flex flex-column p-4" x-data="{ name: '', notes: ''}" x-on:submit="eel.new_game(name, notes)">
+    <label class="form-label">Name</label>
+    <input class="form-control" x-model="name">
+    <label class="form-label mt-2">Notes</label>
+    <textarea class="form-control" x-model="notes"></textarea>
+    <input class="btn btn-success mt-2" type="submit" value="Create">
+</form>

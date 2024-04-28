@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+        <th>Save Name</th>
+        <th>Notes</th>
+        <th>Last Updated</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <template x-for="save in data.saves">
+        <tr>
+            <template x-for="(value, key) in save">
+                <td x-text="value"></td>
+            </template>
+            <td>
+                <button class="btn btn-success" x-on:click="eel.load_game(save.name); notify('Successfully Loaded!'); update()">Load</button>
+                <button hidden class="btn btn-warning" x-on:click="loadPage('edit')">Edit</button>
+                <button class="btn btn-danger" x-on:click="eel.delete_game(save.name); notify('Successfully Deleted!'); update()">Delete</button>
+            </td>
+        </tr>
+        </template>
+    </tbody>
+</table>
+<div></div>
