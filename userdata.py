@@ -13,11 +13,11 @@ def get_userdata_path():
     # Allow user to manually select userdata folder
     messagebox.showinfo('Locate Userdata Folder', 'Unable to find userdata folder automatically. Please manually locate your userdata folder. This is typically located in your Steam folder.')
     userdata_path = filedialog.askdirectory()
-    if os.path.exists(userdata_path) and os.path.dirname(userdata_path) == 'userdata':
+    if os.path.exists(userdata_path) and os.path.basename(userdata_path) == 'userdata':
         return userdata_path
     
     # Unable to locate. Throw an error
-    raise Exception('Unable to locate userdata folder!')
+    raise Exception('Unable to locate userdata folder! Please ensure you selected the `userdata` folder inside Steam.')
 
     
 def get_savedata_path():

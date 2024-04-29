@@ -13,23 +13,25 @@ from steamapi import get_app_list
 from save import get_saves
 from persist import PersistentData
 
+# Application vars
+persist = PersistentData()
+
 # Statics
 SAVE_FOLDER_NAME = 'Saves'
 
 eel.init('gui')
 
 # Get the user's save data path
-savedata_path = get_savedata_path()
+if not persist.savedata_path:
+    persist.savedata_path = get_savedata_path()
+    persist.save()
+
+savedata_path = persist.savedata_path
 game_save_folders = os.listdir(savedata_path)
 app_list = get_app_list()
 
 # Get the games the user has
 games = {appid:name for appid, name in app_list.items() if str(appid) in game_save_folders}
-
-
-# Application vars
-persist = PersistentData()
-
 
 ### Eel exposed functions below ###
 @eel.expose

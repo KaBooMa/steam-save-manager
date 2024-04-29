@@ -10,6 +10,7 @@ class PersistentData:
     active_save: str = None
     app_active_saves: dict = field(default_factory=dict)
     save_metadata: dict[dict[dict]] = field(default_factory=dict)
+    savedata_path: str = None
     _initialized: bool = False
 
 
