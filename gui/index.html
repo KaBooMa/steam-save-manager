@@ -20,6 +20,11 @@
         <!-- NAVBAR -->
         <nav class="navbar navbar-expand-lg bg-primary">
             <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-warning me-2" x-on:click="eel.save_game()().then((val) => { if (val == true) { notify('Saved Successfully!') } })">Save</button>
+                    </li>
+                </ul>
                 <span><b>Game</b></span>
                 <select class="form-select w-auto ms-2 me-4" x-on:change="eel.select_game($event.target.value); update()" x-model="data?.selected_app_id">
                     <template x-for="(name, appid) in data?.games">
@@ -35,13 +40,19 @@
                         <button class="nav-link" x-on:click="loadPage('new')" :class="{ 'active': page == 'new' }">New</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" x-on:click="eel.save_game()().then((val) => { if (val == true) { notify('Saved Successfully!') } })">Save</button>
-                    </li>
-                    <li class="nav-item">
                         <button hidden class="nav-link">Auto Backup</button>
                     </li>
                     <li class="nav-item">
                         <button hidden class="nav-link" x-on:click="loadPage('help')" :class="{ 'active': page == 'help' }">Help</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" x-on:click="loadPage('settings')" :class="{ 'active': page == 'settings' }">
+                            Settings
+                            <span class="badge bg-danger" x-show="data.current_version != data.latest_release.id">!</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" x-show="data.debug">
+                        <button class="nav-link" x-on:click="loadPage('debug')" :class="{ 'active': page == 'debug' }">Debug</button>
                     </li>
                 </ul>
             </div>
@@ -92,6 +103,10 @@
                 }));
             });
 
+            eel.expose(close_window);
+            function close_window() {
+                window.close();
+            }
         </script>
     </body>
 </html>

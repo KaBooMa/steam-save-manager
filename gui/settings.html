@@ -1,0 +1,20 @@
+<div class="p-4">
+    <div x-show="data.current_version != data.latest_release.id">
+        <div class="d-flex">
+            <h1><span class="badge bg-danger" x-show="data.current_version != data.latest_release.id">!</span> New Release Available!</h1>
+            
+        </div>
+        <h5>Release Notes</h5>
+        <p x-text="data.latest_release.update_content"></p>
+        <p><b>File Size:</b> <span x-text="data.latest_release.download_size_formatted"></span></p>
+        <button class="btn btn-primary ms-auto" x-on:click="loadPage('updating'); eel.start_update()">Update Now</button>
+        <hr>
+    </div>
+    <h1>Settings</h1>
+    <p>The settings below are not currently functional. This will be updated in the future.</p>
+    <div class="d-flex flex-column">
+        <label class="form-label">Userdata Folder</label>
+        <input class="form-control" x-model="data.savedata_path" x-init="console.log(data)">
+        <button class="btn btn-primary mt-2">Apply Changes</button>
+    </div>
+</div>

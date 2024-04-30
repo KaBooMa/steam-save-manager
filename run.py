@@ -1,17 +1,27 @@
 ### This fix is applied to allow pyinstaller!! ###
 import sys, os, io
-if not os.path.exists('build.json'):
+if not os.path.exists('README.md'):
     logfile = io.StringIO()
     sys.stdout = logfile
     sys.stderr = logfile
+    DEBUG = False
+else:
+    DEBUG = True
 ##################################################
 
 from tkinter import messagebox
-import eel, shutil
+import eel, shutil, threading, subprocess, time
+
+import update
 from userdata import get_savedata_path
 from steamapi import get_app_list
 from save import get_saves
 from persist import PersistentData
+
+# Clean up any update leftovers
+if os.path.exists('update'):
+    shutil.copy(f'update/{update.UPDATE_EXE_NAME}', './')
+    shutil.rmtree('update')
 
 # Application vars
 persist = PersistentData()
@@ -33,14 +43,22 @@ app_list = get_app_list()
 # Get the games the user has
 games = {appid:name for appid, name in app_list.items() if str(appid) in game_save_folders}
 
+latest_release = update.get_latest_release_info()
+latest_pre_release = update.get_latest_pre_release()
+
 ### Eel exposed functions below ###
 @eel.expose
 def get_app_data():
     return {
         'selected_app_id': persist.selected_app_id,
         'active_save': persist.active_save,
+        'savedata_path': persist.savedata_path,
+        'current_version': persist.release_id,
         'games': games,
         'saves': get_saves(persist),
+        'latest_release': latest_release,
+        'latest_pre_release': latest_pre_release,
+        'debug': DEBUG,
     }
 
 
@@ -62,7 +80,6 @@ def select_game(app_id):
         save_game()
 
     persist.save()
-
 
 
 @eel.expose
@@ -158,5 +175,29 @@ def delete_game(name):
 
     return True
     
+
+update_progress = None
+@eel.expose
+def start_update():
+    thread = threading.Thread(target=download_update)
+    thread.start()
+    return True
+
+
+def download_update():
+    global update_progress
+
+    for status in update.download_update(latest_release.get('download_url')):
+        update_progress = status
+
+    eel.close_window()
+    time.sleep(1) # Might be a better way to handle this. Delaying to allow time for eel to close.
+    subprocess.Popen([update.UPDATE_EXE_NAME, str(latest_release.get('id'))])
+
+
+@eel.expose
+def get_update_progress():
+    global update_progress
+    return update_progress
 
 eel.start('index.html', size=(1200, 800))

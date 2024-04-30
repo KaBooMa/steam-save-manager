@@ -1,0 +1,21 @@
+<div class="p-4" 
+    x-data="{ progress: null }" 
+    x-init="setInterval(async () => { 
+        progress = await eel.get_update_progress()();
+     }, 100);">
+    <h1>Updating</h1>
+    <p>
+        <p><b>Download Speed:</b> <span x-text="progress.download_speed"></span></p>
+        <p><b>Remaining Time:</b> <span x-text="progress.remaining_time"></span> seconds</p>
+    </p>
+    <div class="progress" style="height: 3rem;">
+        <div 
+            class="progress-bar" 
+            role="progressbar" 
+            :style="{ width: progress.download_percentage + '%' }"
+            aria-valuemax="100">
+            <span x-text="progress.download_percentage + '%'"></span>
+        </div>
+        
+    </div>
+</div>
