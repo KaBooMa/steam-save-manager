@@ -99,7 +99,8 @@ def install_update(release_id):
 
     for file in os.listdir('update'):
         # Disregarding update file, as this will be updated from main later
-        if file == UPDATE_EXE_NAME:
+        # Also disregarding persist.json so we don't wipe their data
+        if file == UPDATE_EXE_NAME or file == 'persist.json':
             continue
 
         shutil.move(f'update/{file}', file)
