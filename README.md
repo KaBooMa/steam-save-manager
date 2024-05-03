@@ -7,12 +7,11 @@ A Python program for managing multiple Steam save files.
 - Start a new save whenever you want without losing your progress on other saves
 - Create saves and switch between them
 - Unlimited number of save files
+- Backup individual saves
 - Automatic updating
 
 # Planned Features
-- Backups on saves
 - Automatic backups while application is running (on interval)
-- Editing save names and notes
 - Import saves
 
 # Disclaimer
