@@ -2,6 +2,7 @@ import requests, time, os, shutil, subprocess
 from zipfile import ZipFile
 
 from persist import PersistentData
+import migration
 
 MAIN_EXE_NAME = 'Steam Save Manager.exe'
 UPDATE_EXE_NAME = 'updater.exe'
@@ -107,10 +108,9 @@ def install_update(release_id):
 
     os.remove('update.zip')
 
-    # Update our persistent data with new release
-    persist = PersistentData()
-    persist.release_id = release_id
-    persist.save()
+
+    # Run any migrations to catch up
+    migration.run()
 
     # Launch the main app
     subprocess.Popen(MAIN_EXE_NAME)
