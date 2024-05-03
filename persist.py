@@ -1,14 +1,12 @@
-from dataclasses import asdict, dataclass, fields, field
+from dataclasses import dataclass, fields, field
 import json, os
-from typing import List
 
 PERSISTENT_DATA_FILE = 'persist.json'
 
 @dataclass
 class PersistentData:
     selected_app_id: str = None
-    active_save: str = None
-    app_active_saves: dict = field(default_factory=dict)
+    app_active_saves: dict[dict] = field(default_factory=dict)
     save_metadata: dict[dict[dict]] = field(default_factory=dict)
     savedata_path: str = None
     release_id: int = None

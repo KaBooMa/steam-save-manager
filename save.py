@@ -12,12 +12,21 @@ def get_saves(persist: PersistentData):
     
     saves = []
     for save in os.listdir(save_folder):
-        last_updated = datetime.fromtimestamp(os.path.getmtime(f'{save_folder}/{save}')).strftime('%Y-%m-%d %I:%M:%S %p')
         notes = persist.save_metadata.get(persist.selected_app_id, {}).get(save, {}).get('notes', None)
+        versions = []
+        for version in os.listdir(f'{save_folder}/{save}'):
+            versions.append({
+                'name': version,
+                'last_updated_raw': os.path.getmtime(f'{save_folder}/{save}/{version}'),
+                'last_updated': datetime.fromtimestamp(os.path.getmtime(f'{save_folder}/{save}/{version}')).strftime('%Y-%m-%d %I:%M:%S %p')
+            })
+
+        versions = sorted(versions, key=lambda item: item['last_updated_raw'], reverse=True)
+
         saves.append({
             'name': save,
             'notes': notes,
-            last_updated: last_updated,
+            'versions': versions
         })
 
     return saves

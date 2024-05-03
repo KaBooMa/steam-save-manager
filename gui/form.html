@@ -1,4 +1,8 @@
-<form class="d-flex flex-column p-4" x-data="{ name: '', notes: ''}" x-on:submit="eel.new_game(name, notes)">
+<form 
+    class="d-flex flex-column p-4" 
+    x-data="{ name: '', notes: ''}" 
+    x-init="name = editing.name; notes = editing.notes"
+    x-on:submit="if (editing != null) { eel.edit_game(editing.name, name, notes) } else { eel.new_game(name, notes) }">
     <label class="form-label">Name</label>
     <input class="form-control" x-model="name">
     <label class="form-label mt-2">Notes</label>

@@ -2,21 +2,64 @@
     <thead>
         <th>Save Name</th>
         <th>Notes</th>
-        <th>Last Updated</th>
         <th></th>
     </thead>
     <tbody>
-        <template x-for="save in data.saves">
-        <tr>
-            <template x-for="(value, key) in save">
-                <td x-text="value"></td>
-            </template>
-            <td>
-                <button class="btn btn-primary" x-on:click="eel.load_game(save.name); notify('Successfully Loaded!'); update()">Load</button>
-                <button hidden class="btn btn-warning" x-on:click="loadPage('edit')">Edit</button>
-                <button class="btn btn-danger" x-on:click="eel.delete_game(save.name); notify('Successfully Deleted!'); update()">Delete</button>
-            </td>
-        </tr>
+        <template x-for="save in data?.saves">
+            <tr>
+                <td>
+                    <div class="d-flex flex-column" x-data="{ expanded: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false">
+                        <div class="user-select-none" style="cursor: pointer" x-on:click="expanded = !expanded">
+                            <span x-text="save.name"></span>
+                            <i x-show="!expanded" class="fa-solid fa-chevron-down"></i>
+                            <i x-show="expanded" class="fa-solid fa-chevron-up"></i>
+                        </div>
+                        <button 
+                            class="btn btn-warning mt-2 flex-grow-0" 
+                            x-show="expanded"
+                            x-transition
+                            x-on:click="editing = {'name': save.name, 'notes': save.notes }; loadPage('form')">Edit</button>
+                        <button 
+                            class="btn btn-danger my-2" 
+                            x-show="expanded"
+                            x-transition
+                            x-on:click="eel.delete_version(save.name, version.name)().then(success => { if (success) { 
+                                notify({ message: 'Deleted!', color: 'bg-success' }); 
+                            } else { 
+                                notify({ message: 'Failed to delete.', color: 'bg-danger' }); 
+                            } update(); })"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>
+                <td><pre x-text="save.notes"></pre></td>
+                <td class="p-0">
+                    <div class="pt-2">
+                        <h5 class="pb-2 ms-2">Last Updated</h5>
+                        <template x-for="version in save.versions">
+                            <div>
+                                <hr class="m-0">
+                                <div 
+                                    x-data="{ hover: false }"
+                                    class="d-flex"
+                                    :class="{ 'bg-secondary': hover, 'bg-primary': version.name == data?.active_save.version }" 
+                                    x-on:mouseenter="hover = true"
+                                    x-on:mouseleave="hover = false">
+                                    <span 
+                                        class="flex-grow-1 p-2"
+                                        x-text="version.last_updated"
+                                        x-on:click="eel.load_version(save.name, version.name); notify({ message: 'Loaded!', color: 'bg-success' }); update()"></span>
+                                    <button 
+                                        class="btn btn-danger ms-auto m-2" 
+                                        x-on:click="eel.delete_version(save.name, version.name)().then(success => { if (success) { 
+                                            notify({ message: 'Deleted!', color: 'bg-success' }); 
+                                        } else { 
+                                            notify({ message: 'Failed to delete.', color: 'bg-danger' }); 
+                                        } update(); })"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </td>
+            </tr>
         </template>
     </tbody>
 </table>
