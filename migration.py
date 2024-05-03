@@ -2,7 +2,7 @@ import os, uuid, shutil
 
 from persist import PersistentData
 
-def run(override_id):
+def run(override_id = None):
     persist = PersistentData()
     if override_id:
         persist.release_id = override_id
