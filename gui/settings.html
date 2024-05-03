@@ -5,7 +5,7 @@
             
         </div>
         <h5>Release Notes</h5>
-        <p x-text="data.latest_release.update_content"></p>
+        <pre x-text="data.latest_release.update_content"></pre>
         <p><b>File Size:</b> <span x-text="data.latest_release.download_size_formatted"></span></p>
         <button class="btn btn-primary ms-auto" x-on:click="loadPage('updating'); eel.start_update()">Update Now</button>
         <hr>
